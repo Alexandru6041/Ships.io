@@ -2,6 +2,7 @@ import pygame
 from ui.game_manager import GameManager
 from ui.screen_manager import ScreenManager
 from ui.screens.index import IndexPage
+from ui.screens.pfb import Pfb
 from ui.settings import *
 
 pygame.init()
@@ -15,7 +16,8 @@ screen_manager = ScreenManager()
 game_manager = GameManager()
 
 screen_manager.add_screens([
-    IndexPage(window, 0, game_manager)
+    # IndexPage(window, 0, game_manager),
+    Pfb(window, 0, game_manager)
 ])
 
 while game_manager.running:
