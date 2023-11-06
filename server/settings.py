@@ -1,6 +1,6 @@
 from game_elements.question import Question
 
-DEFAULT_SIZE = 1024
+DEFAULT_SIZE = 3072
 TIME_LIMIT = 30
 Question_List = [
             Question("Cum o cheama pe mama", ["1", "2", "3"], 1),
@@ -9,3 +9,4 @@ Question_List = [
 
 TARGET_AREA = (4, 4)
 KILLSIGNAL = '!KILL'
+OK_MESSAGE = '!O'

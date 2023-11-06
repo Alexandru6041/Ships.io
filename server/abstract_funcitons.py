@@ -1,13 +1,20 @@
 import socket, sys
-from .settings import DEFAULT_SIZE, TARGET_AREA
+from .settings import DEFAULT_SIZE, TARGET_AREA, OK_MESSAGE
 
 def receive(client:socket.socket):
     size = int(client.recv(DEFAULT_SIZE).decode())
-    return client.recv(size)
+    data = client.recv(size)
+    client.send(OK_MESSAGE.encode())
+
+    return data
 
 def send(client:socket.socket, data:bytes):
     client.send(f'{sys.getsizeof(data)}'.encode())
     client.send(data)
+
+    if not client.recv(DEFAULT_SIZE).decode() == OK_MESSAGE:
+        raise Exception
+
     
 def fill_algorithm(m:list[list[int]], X:int, Y:int):
     Q = [(X, Y)]
