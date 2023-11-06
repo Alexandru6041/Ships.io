@@ -25,6 +25,9 @@ class Label():
     def draw(self):
         self.screen.blit(self.image, (self.rect))
 
+def show_labels():
+    for label in LABELS:
+        label.draw()
 # if __name__ == "__main__":
 #     win = pygame.display.set_mode((600, 600))
     
