@@ -3,6 +3,7 @@ from .settings import DEFAULT_SIZE, TARGET_AREA, OK_MESSAGE
 
 def receive(client:socket.socket):
     size = int(client.recv(DEFAULT_SIZE).decode())
+    client.send(OK_MESSAGE.encode())
     data = client.recv(size)
     client.send(OK_MESSAGE.encode())
 
@@ -10,8 +11,10 @@ def receive(client:socket.socket):
 
 def send(client:socket.socket, data:bytes):
     client.send(f'{sys.getsizeof(data)}'.encode())
+    if not client.recv(DEFAULT_SIZE).decode() == OK_MESSAGE:
+        raise Exception
+    
     client.send(data)
-
     if not client.recv(DEFAULT_SIZE).decode() == OK_MESSAGE:
         raise Exception
 
