@@ -1,13 +1,8 @@
-from server.client import Client
+from server.host import Server
 
-
-server_ip = input('ip> ')
-server_port = int(input('port> '))
-c = Client(server_ip, server_port, None)
-
-c.send_board([[1, 1, 1], [1, 0, 1]])
-q = c.recv_q()
-
-print(q.statement)
-
-c.close_connection()
+if __name__ == '__main__':
+    server = Server(server_ip='192.168.100.7', logger=None)
+    server.start_listening()
+    server.set_stage_winner(1)
+    server.attack_stage()
+    server.close()
