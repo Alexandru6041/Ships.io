@@ -2,6 +2,13 @@ import pygame
 
 class InputHandler:
     def __init__(self, events:dict, game_manager):
+        """
+        Structura events\n
+        events:\n
+            <cheie> -> functie()\n
+            mouse:\n
+                <buton> -> functie(pos)
+        """
         self.events = events
         self.game_manager = game_manager
 
