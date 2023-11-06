@@ -29,10 +29,11 @@ class Client:
         return receive(self.__s).decode()
 
     def attack(self, coords:tuple[int, int]):
-        send(self.__s, json.dumps(list(coords)))
+        send(self.__s, json.dumps(list(coords)).encode())
 
-    def update_boards(self):
-        pass
+    def update_boards(self) -> list[list[list[int]], list[list[int]]]:
+        boards = json.loads(receive(self.__s).decode())
+        return boards
 
     def close_connection(self):
         send(self.__s, KILLSIGNAL.encode())
