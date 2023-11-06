@@ -1,8 +1,7 @@
 import pygame
 from ui.game_manager import GameManager
 from ui.screen_manager import ScreenManager
-from ui.input_handler import InputHandler
-from ui.screens import *
+from ui.screens.index import IndexPage
 from ui.settings import *
 
 pygame.init()
@@ -12,16 +11,14 @@ pygame.font.init()
 
 window = pygame.display.set_mode((1200, 800))
 
-input_handler = InputHandler()
-
 screen_manager = ScreenManager()
-game_manager = GameManager(input_handler, screen_manager)
+game_manager = GameManager()
 
 screen_manager.add_screens([
-
+    IndexPage(window, 0, game_manager)
 ])
 
-while True:
+while game_manager.running:
     window.fill('white')
     screen_manager.current_screen.draw()
     pygame.display.update()

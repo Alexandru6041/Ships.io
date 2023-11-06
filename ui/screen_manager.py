@@ -13,4 +13,4 @@ class ScreenManager:
     
     @property
     def current_screen(self) -> Screen:
-        return self.screens[self.__current_screen]
+        return self.__screens[self.__current_screen]

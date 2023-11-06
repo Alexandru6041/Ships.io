@@ -1,4 +1,5 @@
 import pygame
+from ui.input_handler import InputHandler
 from .label import Label
 
 class Button:
@@ -8,10 +9,13 @@ class Button:
         self.size = size
         self.color = color
         self.label = Label(surface, label, font_size, 'white')
-        self.on_press = on_press
+        self.__on_press = on_press
 
     def draw(self):
         w, h = self.label.get_size()
         pygame.draw.rect(self.surface, self.color, self.pos + self.size)
         self.label.draw((self.pos[0] + (self.size[0] - w) / 2,
                          self.pos[1] + (self.size[1] - h) / 2))
+
+    def press(self):
+        self.__on_press()
