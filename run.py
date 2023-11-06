@@ -11,6 +11,7 @@ pygame.display.set_caption(TITLE)
 pygame.font.init()
 
 window = pygame.display.set_mode((1200, 800))
+
 input_handler = InputHandler()
 
 screen_manager = ScreenManager()
@@ -21,5 +22,6 @@ screen_manager.add_screens([
 ])
 
 while True:
+    window.fill('white')
     screen_manager.current_screen.draw()
     pygame.display.update()
