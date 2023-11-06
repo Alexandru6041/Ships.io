@@ -1,6 +1,13 @@
-from server.host import Server
+from server.client import Client
 
-if __name__ == '__main__':
-    server = Server(server_ip='192.168.1.252', logger=None)
-    server.start_listening()
-    server.close()
+
+server_ip = input('ip> ')
+server_port = int(input('port> '))
+c = Client(server_ip, server_port, None)
+
+c.send_board([[1, 1, 1], [1, 0, 1]])
+q = c.recv_q()
+
+print(q.statement)
+
+c.close_connection()
