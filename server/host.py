@@ -1,5 +1,4 @@
 import socket
-from logger import Logger
 from server.abstract_funcitons import send, receive, fill_algorithm
 from game_elements.question import Question
 from random import randint
@@ -31,11 +30,10 @@ class Handler:
         send(client, data)
         
 class Server:
-    def __init__(self, server_ip:str='0.0.0.0', port:int=8000, logger=Logger):
+    def __init__(self, server_ip:str='0.0.0.0', port:int=8000):
         self.__server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.__server.bind((server_ip, port))
         # print(self.__server.getsockname())
-        self.logger = logger
         self.players = []
     
     def start_listening(self):
@@ -51,7 +49,6 @@ class Server:
             client_socket, client_address = self.__server.accept()
             print(f"Connection from {client_address} has been established!")
             table = js.loads(Handler.recv(client_socket).decode())
-            self.players.append(Player(client_socket, table))
             self.players.append(Player(client_socket, table))
             print('\n' * 5)
             
