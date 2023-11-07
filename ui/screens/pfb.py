@@ -17,6 +17,9 @@ class Pfb(Screen):
         self.table = [[0 for i in range(GRID_TEMPLATE[1])] for i in range(GRID_TEMPLATE[0])]
     
     def click_cell(self, pos:tuple[int, int]):
+        if not is_in_grid(pos):
+            return
+        
         x0 = (WINDOW_SIZE[0] - GRID_SIZE[0]) // 2
         y0 = (WINDOW_SIZE[1] - GRID_SIZE[1]) // 2
         grid_x = (pos[1] - y0) // CELL_SIZE[0]
@@ -25,6 +28,9 @@ class Pfb(Screen):
         self.table[grid_x][grid_y] = 1
     
     def erase_cell(self, pos:tuple[int, int]):
+        if not is_in_grid(pos):
+            return
+        
         x0 = (WINDOW_SIZE[0] - GRID_SIZE[0]) // 2
         y0 = (WINDOW_SIZE[1] - GRID_SIZE[1]) // 2
         grid_x = (pos[1] - y0) // CELL_SIZE[0]
@@ -33,14 +39,18 @@ class Pfb(Screen):
         self.table[grid_x][grid_y] = 0
     
     def draw(self):
-        #Grid
-        pygame.draw.rect(self.win, 'black', (400, 200, 400, 400), 1)
+        x0 = (WINDOW_SIZE[0] - GRID_SIZE[0]) // 2
+        y0 = (WINDOW_SIZE[1] - GRID_SIZE[1]) // 2
+        #Grid 
+        pygame.draw.rect(self.win, 'black', ((WINDOW_SIZE[0] - GRID_SIZE[0])// 2, (WINDOW_SIZE[1] - GRID_SIZE[1]) // 2) + GRID_SIZE, 1)
         for i in range(10):
             for j in range(10):
-                pygame.draw.rect(self.win, 'black', (400 + i * 40, 200 + j * 40, 40, 40), 1)
+                pygame.draw.rect(self.win, 'black', (x0 + j * CELL_SIZE[0],  y0 + i * CELL_SIZE[1]) + CELL_SIZE, 1)
                 if self.table[i][j]:
-                    pygame.draw.rect(self.win, 'blue', (400 + j * 40 + 1, 200 + i * 40 + 1, 39, 39))
+                    pygame.draw.rect(self.win, 'blue', (x0 + j * CELL_SIZE[0] + 1, y0 + i * CELL_SIZE[1] + 1, CELL_SIZE[0] - 1, CELL_SIZE[1] - 1))
                 
         self.input_handler.handle_events()
         
-        
+
+def is_in_grid(pos:tuple[int, int]) -> bool:
+    return (WINDOW_SIZE[0] - GRID_SIZE[0]) // 2 <= pos[0] < (WINDOW_SIZE[0] + GRID_SIZE[0]) // 2 and (WINDOW_SIZE[1] - GRID_SIZE[1]) // 2 <= pos[1] < (WINDOW_SIZE[1] + GRID_SIZE[1]) // 2
