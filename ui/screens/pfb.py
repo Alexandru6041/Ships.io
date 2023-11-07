@@ -12,12 +12,19 @@ class Pfb(Screen):
         self.input_handler = InputHandler({'mouse':{
             1: self.click_cell,
             3: self.erase_cell
-            }}, game_manager)
+            }, pygame.K_SPACE: self.move_on}, game_manager)
         
         self.table = [[0 for i in range(GRID_TEMPLATE[1])] for i in range(GRID_TEMPLATE[0])]
+        self.move_on_label = Label(self.win, 'You have finished your drawing! Press Space to enter the game!', 20, 'black')
+        self.colored_cnt = 0
     
+    def move_on(self):
+        if self.colored_cnt == 15:
+            self.game_manager.start_game(self.table)
+            self.game_manager.change_screen(2)
+
     def click_cell(self, pos:tuple[int, int]):
-        if not is_in_grid(pos):
+        if not is_in_grid(pos) or self.colored_cnt == COLORED_CELL_MAX:
             return
         
         x0 = (WINDOW_SIZE[0] - GRID_SIZE[0]) // 2
@@ -25,7 +32,9 @@ class Pfb(Screen):
         grid_x = (pos[1] - y0) // CELL_SIZE[0]
         grid_y = (pos[0] - x0) // CELL_SIZE[1]
         
-        self.table[grid_x][grid_y] = 1
+        if not self.table[grid_x][grid_y]:
+            self.table[grid_x][grid_y] = 1
+            self.colored_cnt += 1
     
     def erase_cell(self, pos:tuple[int, int]):
         if not is_in_grid(pos):
@@ -36,7 +45,9 @@ class Pfb(Screen):
         grid_x = (pos[1] - y0) // CELL_SIZE[0]
         grid_y = (pos[0] - x0) // CELL_SIZE[1]
         
-        self.table[grid_x][grid_y] = 0
+        if self.table[grid_x][grid_y]:
+            self.table[grid_x][grid_y] = 0
+            self.colored_cnt -= 1
     
     def draw(self):
         x0 = (WINDOW_SIZE[0] - GRID_SIZE[0]) // 2
@@ -48,7 +59,10 @@ class Pfb(Screen):
                 pygame.draw.rect(self.win, 'black', (x0 + j * CELL_SIZE[0],  y0 + i * CELL_SIZE[1]) + CELL_SIZE, 1)
                 if self.table[i][j]:
                     pygame.draw.rect(self.win, 'blue', (x0 + j * CELL_SIZE[0] + 1, y0 + i * CELL_SIZE[1] + 1, CELL_SIZE[0] - 1, CELL_SIZE[1] - 1))
-                
+
+        if self.colored_cnt == COLORED_CELL_MAX:
+            self.move_on_label.draw((x0, y0 + GRID_SIZE[1] + 50))
+
         self.input_handler.handle_events()
         
 

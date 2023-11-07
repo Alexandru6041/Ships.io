@@ -1,4 +1,3 @@
-# from ui.game_manager import GameManager
 from ui.input_handler import InputHandler
 from ui.screen import Screen
 from ui.elements.label import Label
