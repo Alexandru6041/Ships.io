@@ -28,10 +28,10 @@ class GameArea(Screen):
         self.input_handler = InputHandler({}, game_manager)
 
         self.left_board = Grid(self.win, (WINDOW_SIZE[0] // 2 - GRID_SIZE[0] - 60, (WINDOW_SIZE[1] - GRID_SIZE[1]) // 2),
-                               self.game_manager.my_table, {1:'blue', 2:'red'})
+                               self.game_manager.my_board, {1:'blue', 2:'red'})
         
         self.right_board = Grid(self.win, (WINDOW_SIZE[0] // 2 + 60, (WINDOW_SIZE[1] - GRID_SIZE[1]) // 2),
-                               self.game_manager.other_table, {2:'blue'})
+                               self.game_manager.other_board, {2:'blue'})
 
     def draw(self):
         self.left_board.draw()
