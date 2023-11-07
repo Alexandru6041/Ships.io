@@ -13,7 +13,7 @@ pygame.font.init()
 window = pygame.display.set_mode((1200, 800))
 
 screen_manager = ScreenManager()
-game_manager = GameManager()
+game_manager = GameManager(screen_manager)
 
 screen_manager.add_screens([
     # IndexPage(window, 0, game_manager),
