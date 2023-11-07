@@ -82,12 +82,11 @@ class Server:
         winner, loser = (player1, player2) if self.stage_winner == 1 else (player2, player1)
         x, y = js.loads(Handler.recv(winner.soc))
 
-        fill_algorithm(loser.table, x, y)        
+        mask = fill_algorithm(loser.table, x, y)
         # Masking the table
         
-        Handler.send(loser.soc, js.dumps([loser.table, masked(winner.table)]).encode())
-        time.sleep(1)
-        Handler.send(winner.soc, js.dumps([winner.table, masked(loser.table)]).encode())
+        Handler.send(loser.soc, js.dumps(mask).encode())
+        Handler.send(winner.soc, js.dumps(mask).encode())
         
     def question_stage(self, q:int) -> int:
         player1, player2 = self.players
@@ -141,9 +140,3 @@ class Server:
             return 1
     
         return 0
-
-def masked(m):
-    mask = [[0 if m[i][j] == 1 else m[i][j] for j in range(len(m[0]))] for i in range(len(m))]      
-    print(mask)
-    
-    return mask
