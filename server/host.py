@@ -64,7 +64,7 @@ class Server:
         while True:
             match i:
                 case 0:
-                    signal = self.question_stage(randint(0, len(Question_List)))
+                    signal = self.question_stage(randint(0, len(Question_List)-1))
                     i += 1 if not signal else 0
                 case 1:
                     self.attack_stage()
@@ -81,12 +81,15 @@ class Server:
         player1, player2 = self.players
         winner, loser = (player1, player2) if self.stage_winner == 1 else (player2, player1)
         x, y = js.loads(Handler.recv(winner.soc))
+        print('Attack received!')
 
         mask = fill_algorithm(loser.table, x, y)
         # Masking the table
         
         Handler.send(loser.soc, js.dumps(mask).encode())
+        print('Mask sent to loser')
         Handler.send(winner.soc, js.dumps(mask).encode())
+        print('Mask sent to winner')
         
     def question_stage(self, q:int) -> int:
         player1, player2 = self.players
@@ -97,9 +100,12 @@ class Server:
         # Handler.send QUESTION
         Handler.send(player1.soc, question.as_bytes())
         Handler.send(player2.soc, question.as_bytes())
+        print('Questions sent!')
         # GET ANSWERS
         answer1, time1 = js.loads(Handler.recv(player1.soc).decode())
         answer2, time2 = js.loads(Handler.recv(player2.soc).decode())
+
+        print('Answers received')
         
         # judge answers
         b1 = (time1 <= TIME_LIMIT and answer1 == question.correct)
