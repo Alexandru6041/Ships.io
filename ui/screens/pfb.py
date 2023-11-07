@@ -20,7 +20,7 @@ class Pfb(Screen):
         self.treasure = None
     
     def move_on(self):
-        if self.wall_cnt == 15:
+        if self.wall_cnt == MAX_WALL_NB:
             self.game_manager.start_game(self.table)
             self.game_manager.change_screen(2)
 

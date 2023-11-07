@@ -1,5 +1,5 @@
 import socket, sys
-from .settings import DEFAULT_SIZE, TARGET_AREA, OK_MESSAGE
+from .settings import DEFAULT_SIZE, OK_MESSAGE
 
 def receive(client:socket.socket):
     size = int(client.recv(DEFAULT_SIZE).decode())
@@ -25,16 +25,25 @@ def fill_algorithm(m:list[list[int]], X:int, Y:int):
     dy = [0, 1, 0, -1]
     
     viz = [[0 for _ in range(len(m[0]))] for _ in range(len(m))]
+    if m[X][Y] == 1:
+        viz[X][Y] = 1
+        return viz
     
-    while len(Q):
+    while Q:
         x, y = Q[0]
         Q.pop(0)
-        if(m[x][y] == 1):
-            m[x][y] = 2
-        
+
         for i in range(4):
             n_x, n_y = x + dx[i], y + dy[i]
-            
-            if X <= n_x < min(X + TARGET_AREA[0], len(m)) and Y <= n_y < min(Y + TARGET_AREA, len(m[0])) and not viz[n_x][n_y]:
-                viz[n_x][n_y] = 1
-                Q.append((n_x, n_y))
+
+            if 0 <= n_x < len(m) and 0 <= n_y < len(m[0]) and not viz[n_x][n_y]:
+                if not m[n_x][n_y]:
+                    viz[n_x][n_y] = -1
+                    Q.append((n_x, n_y))
+                
+                elif m[n_x][n_y] == 1:
+                    viz[n_x][n_y] = 1
+                
+                else: viz[n_x][n_y] = 100
+        
+    return viz
