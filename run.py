@@ -18,11 +18,13 @@ screen_manager = ScreenManager()
 game_manager = GameManager(screen_manager)
 
 screen_manager.add_screens([
-    # IndexPage(window, 0, game_manager),
     Pfb(window, 0, game_manager),
     GameArea(window, 1, game_manager),
-    QuestionScreen(window, 2, game_manager)
+    QuestionScreen(window, 2, game_manager),
+    IndexPage(window, 3, game_manager),
 ])
+
+game_manager.change_screen(3)
 
 while game_manager.running:
     window.fill('white')

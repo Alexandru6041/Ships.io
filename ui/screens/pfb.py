@@ -77,6 +77,10 @@ class Pfb(Screen):
         if self.wall_cnt == MAX_WALL_NB:
             self.move_on_label.draw((x0, y0 + GRID_SIZE[1] + 50))
 
+        Label(self.win, 'left click to draw a wall', 20, 'black').draw((400, 700))
+        Label(self.win, 'right click to erase a wall', 20, 'black').draw((400, 730))
+        Label(self.win, 'double click to place the Treasure', 20, 'black').draw((400, 760))
+        
         self.input_handler.handle_events()
         
 
