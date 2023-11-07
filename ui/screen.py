@@ -1,8 +1,5 @@
-from ui.game_manager import GameManager
-
-
 class Screen:
-    def __init__(self, win, name:str, index:int, game_manager:GameManager):
+    def __init__(self, win, name:str, index:int, game_manager):
         self.win = win
         self.name = name
         self.index = index
