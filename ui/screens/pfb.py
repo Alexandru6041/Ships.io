@@ -16,15 +16,16 @@ class Pfb(Screen):
         
         self.table = [[0 for i in range(GRID_TEMPLATE[1])] for i in range(GRID_TEMPLATE[0])]
         self.move_on_label = Label(self.win, 'You have finished your drawing! Press Space to enter the game!', 20, 'black')
-        self.colored_cnt = 0
+        self.wall_cnt = 0
+        self.treasure = None
     
     def move_on(self):
-        if self.colored_cnt == 15:
+        if self.wall_cnt == 15:
             self.game_manager.start_game(self.table)
             self.game_manager.change_screen(2)
 
     def click_cell(self, pos:tuple[int, int]):
-        if not is_in_grid(pos) or self.colored_cnt == COLORED_CELL_MAX:
+        if not is_in_grid(pos):
             return
         
         x0 = (WINDOW_SIZE[0] - GRID_SIZE[0]) // 2
@@ -32,9 +33,15 @@ class Pfb(Screen):
         grid_x = (pos[1] - y0) // CELL_SIZE[0]
         grid_y = (pos[0] - x0) // CELL_SIZE[1]
         
-        if not self.table[grid_x][grid_y]:
+        if not self.table[grid_x][grid_y] and self.wall_cnt < MAX_WALL_NB:
             self.table[grid_x][grid_y] = 1
-            self.colored_cnt += 1
+            self.wall_cnt += 1
+        
+        elif self.table[grid_x][grid_y]:
+            self.table[grid_x][grid_y] = 100
+            if self.treasure: self.table[self.treasure[0]][self.treasure[1]] = 0
+            self.treasure = (grid_x, grid_y)
+
     
     def erase_cell(self, pos:tuple[int, int]):
         if not is_in_grid(pos):
@@ -47,7 +54,7 @@ class Pfb(Screen):
         
         if self.table[grid_x][grid_y]:
             self.table[grid_x][grid_y] = 0
-            self.colored_cnt -= 1
+            self.wall_cnt -= 1
     
     def draw(self):
         x0 = (WINDOW_SIZE[0] - GRID_SIZE[0]) // 2
@@ -56,11 +63,18 @@ class Pfb(Screen):
         pygame.draw.rect(self.win, 'black', ((WINDOW_SIZE[0] - GRID_SIZE[0])// 2, (WINDOW_SIZE[1] - GRID_SIZE[1]) // 2) + GRID_SIZE, 1)
         for i in range(10):
             for j in range(10):
-                pygame.draw.rect(self.win, 'black', (x0 + j * CELL_SIZE[0],  y0 + i * CELL_SIZE[1]) + CELL_SIZE, 1)
+                cell_x = x0 + j * CELL_SIZE[0]
+                cell_y = y0 + i * CELL_SIZE[1]
+                pygame.draw.rect(self.win, 'black', (cell_x,  cell_y) + CELL_SIZE, 1)
                 if self.table[i][j]:
-                    pygame.draw.rect(self.win, 'blue', (x0 + j * CELL_SIZE[0] + 1, y0 + i * CELL_SIZE[1] + 1, CELL_SIZE[0] - 1, CELL_SIZE[1] - 1))
+                    pygame.draw.rect(self.win, 'blue', (cell_x + 1, cell_y + 1, CELL_SIZE[0] - 1, CELL_SIZE[1] - 1))
 
-        if self.colored_cnt == COLORED_CELL_MAX:
+                    if self.table[i][j] == 100:
+                        l = Label(self.win, 'T', 18, 'yellow')
+                        w, h = l.get_size()
+                        l.draw((cell_x + w // 2, cell_y + h // 2))
+
+        if self.wall_cnt == MAX_WALL_NB:
             self.move_on_label.draw((x0, y0 + GRID_SIZE[1] + 50))
 
         self.input_handler.handle_events()

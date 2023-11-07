@@ -26,7 +26,7 @@ Question_List = [
             Question("Cine a scris Odiseea", ["Platon", "Homer", "Mihai Eminescu"], 1),
             Question("Care este cea mai mare planeta din Sistemul Solar", ["Mercur", "Pluto", "Jupiter"], 2),
             Question("Cine a fost primul om pe Luna in 1969", ["Neil Armstrong", "Garry Kasparov", "Dumitru Prunariu"], 0),
-            Question("Cine a pictat 'Mona Lisa'", [], ),
+            # Question("Cine a pictat 'Mona Lisa'", [], ),
             Question("Care este cartea sacra a religiei iudaice", ["Evanghelia", "Tora", "Coranul"], 1),
             Question("Care a fost capitala Imperiului Roman", ["Constantinopol", "Roma", "Bucuresti"], 1),
             Question("Cine a sculptat statuia David", ["Michelangelo", "Leonardo Da Vinci", "Constantin Brancoveanu"], 0),

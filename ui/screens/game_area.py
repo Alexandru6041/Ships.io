@@ -1,4 +1,5 @@
 import pygame
+from ui.elements.label import Label
 from ui.input_handler import InputHandler
 from ui.screen import Screen
 from ui.settings import *
@@ -17,23 +18,28 @@ class Grid:
 
         for i in range(10):
             for j in range(10):
+                cell_x = x0 + j * CELL_SIZE[0]
+                cell_y = y0 + i * CELL_SIZE[1]
+                pygame.draw.rect(self.win, 'black', (cell_x,  cell_y) + CELL_SIZE, 1)
                 if self.m[i][j]:
-                    pygame.draw.rect(self.win, self.color_map[self.m[i][j]], (x0 + j * CELL_SIZE[0] + 1, y0 + i * CELL_SIZE[1] + 1, CELL_SIZE[0] - 1, CELL_SIZE[1] - 1))
-                
-                pygame.draw.rect(self.win, 'black', (x0 + j * CELL_SIZE[0],  y0 + i * CELL_SIZE[1]) + CELL_SIZE, 1)
+                    pygame.draw.rect(self.win, self.color_map[self.m[i][j]], (cell_x + 1, cell_y + 1, CELL_SIZE[0] - 1, CELL_SIZE[1] - 1))
+
+                    if self.m[i][j] == 100:
+                        l = Label(self.win, 'T', 18, 'yellow')
+                        w, h = l.get_size()
+                        l.draw((cell_x + w // 2, cell_y + h // 2))
 
 class GameArea(Screen):
     def __init__(self, win, index:int, game_manager):
         super(GameArea, self).__init__(win, 'GameArea', index, game_manager)
         self.input_handler = InputHandler({}, game_manager)
 
-        self.left_board = Grid(self.win, (WINDOW_SIZE[0] // 2 - GRID_SIZE[0] - 60, (WINDOW_SIZE[1] - GRID_SIZE[1]) // 2),
+    def draw(self):
+        left_board = Grid(self.win, (WINDOW_SIZE[0] // 2 - GRID_SIZE[0] - 60, (WINDOW_SIZE[1] - GRID_SIZE[1]) // 2),
                                self.game_manager.my_board, {1:'blue', 2:'red'})
         
-        self.right_board = Grid(self.win, (WINDOW_SIZE[0] // 2 + 60, (WINDOW_SIZE[1] - GRID_SIZE[1]) // 2),
+        right_board = Grid(self.win, (WINDOW_SIZE[0] // 2 + 60, (WINDOW_SIZE[1] - GRID_SIZE[1]) // 2),
                                self.game_manager.other_board, {2:'blue'})
-
-    def draw(self):
-        self.left_board.draw()
-        self.right_board.draw()
+        left_board.draw()
+        right_board.draw()
         self.input_handler.handle_events()
