@@ -55,6 +55,14 @@ class GameArea(Screen):
             if not loser_up_to_date:
                 changes = self.game_manager.client.update_board()
                 for i in range(10):
+                    for j in range(10):    
+                        if not self.game_manager.my_board[i][j] and changes[i][j]:
+                            self.game_manager.my_board[i][j] = changes[i][j]
+                
+                
+                self.draw(loser_up_to_date=True)
+                pygame.display.update()
+                for i in range(10):
                     for j in range(10):
                         if changes[i][j] == 100:
                             l = Label(self.win, 'YOU LOST!', 50, 'red')
@@ -62,16 +70,10 @@ class GameArea(Screen):
                             l.draw(((WINDOW_SIZE[0] -  w)// 2, (WINDOW_SIZE[1] - h) // 2))
                             pygame.display.update()
                             time.sleep(10)
-                            self.game_manager.client.close()
+                            self.game_manager.client.close_connection()
                             self.game_manager.running = False
                             return
                         
-                        if not self.game_manager.my_board[i][j] and changes[i][j]:
-                            self.game_manager.my_board[i][j] = changes[i][j]
-                
-                
-                self.draw(loser_up_to_date=True)
-                pygame.display.update()
                 time.sleep(5)
                 self.game_manager.change_screen(2)
         
@@ -90,21 +92,23 @@ class GameArea(Screen):
             changes = self.game_manager.client.update_board()
             for i in range(10):
                 for j in range(10):
+                    if not self.game_manager.other_board[i][j] and changes[i][j]:
+                        self.game_manager.other_board[i][j] = changes[i][j]
+            
+            self.draw(events=False)
+            pygame.display.update()
+            for i in range(10):
+                for j in range(10):
                     if changes[i][j] == 100:
                         l = Label(self.win, 'YOU WON!', 50, 'green')
                         w, h = l.get_size()
                         l.draw(((WINDOW_SIZE[0] -  w)// 2, (WINDOW_SIZE[1] - h) // 2))
                         pygame.display.update()
                         time.sleep(10)
-                        self.game_manager.client.close()
+                        self.game_manager.client.close_connection()
                         self.game_manager.running = False
                         return
                     
-                    if not self.game_manager.other_board[i][j] and changes[i][j]:
-                        self.game_manager.other_board[i][j] = changes[i][j]
-            
-            self.draw(events=False)
-            pygame.display.update()
             time.sleep(5)
             self.game_manager.change_screen(2)
         
